@@ -1,17 +1,7 @@
-import sqlite3
-import bcrypt
+from user import init_user_db, add_user
 
-con = sqlite3.connect("users.db")
-c = con.cursor()
-users = [("admin", "admin123", "Admin"), ("hrmanager", "hr2025", "HR"),
-         ("payrollstaff", "payroll2025", "Payroll")]
-
-for username, pwd, role in users:
-    hashed = bcrypt.hashpw(pwd.encode(), bcrypt.gensalt())
-    try:
-        c.execute("INSERT INTO users (username, password, role) Values (?,?,?)", (username, hashed, role))
-    except sqlite3.IntegrityError:
-        pass
-
-con.commit()
-con.close()
+init_user_db()
+add_user("admin", "admin123", "Admin")
+add_user("hr", "hr123", "HR")
+add_user("payroll", "pay123", "Payroll")
+add_user("Hasnain", "H2004", "Admin")
