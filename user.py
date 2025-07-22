@@ -11,8 +11,12 @@ def authenticate(username, password):
     con.close()
 
     if row:
-        return bcrypt.checkpw(password.encode(),row[0])
+        stored_hash = row[0]
+        if isinstance(stored_hash,str):
+            stored_hash = stored_hash.encode('utf-8') 
+        return bcrypt.checkpw(password.encode('utf-8'),stored_hash)
     return False
+
 
 def get_user_role(username):
     con = sqlite3.connect(DB_FILE)
