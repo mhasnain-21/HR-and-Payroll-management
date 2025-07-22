@@ -58,7 +58,7 @@ if menu == "Employee's Management":
     name = st.text_input("Employee-Name")
     E_id = st.text_input("Employee-ID")
     dept = st.selectbox("Departments ",["HR", "IT",  "Finance", "Marketing"])
-    join_date = st.date_input("Joining-Date")
+    join_date = st.date_input("Joining Date")
     status = st.selectbox("Status",["Active","Inactive"])
 
     if st.button("Add Employee"):
@@ -72,7 +72,7 @@ if menu == "Employee's Management":
                 new_row = {"ID": E_id,
                          "Name": name,
                          "Department": dept,
-                         "Joining-Date": join_date,
+                         "Joining Date": join_date,
                          "Status": status
                          }
                 df = pd.concat([df,pd.DataFrame([new_row])],ignore_index=True)
