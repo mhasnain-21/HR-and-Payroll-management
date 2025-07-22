@@ -12,9 +12,13 @@ def authenticate(username, password):
 
     if row:
         stored_hash = row[0]
-        if isinstance(stored_hash,str):
-            stored_hash = stored_hash.encode('utf-8') 
-        return bcrypt.checkpw(password.encode('utf-8'),stored_hash)
+
+        # Stored hash is str → convert to bytes
+        if isinstance(stored_hash, str):
+            stored_hash = stored_hash.encode('utf-8')
+
+        return bcrypt.checkpw(password.encode('utf-8'), stored_hash)
+
     return False
 
 
