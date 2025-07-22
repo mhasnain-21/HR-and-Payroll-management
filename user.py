@@ -1,31 +1,22 @@
+# create_users_db.py
 import sqlite3
 import bcrypt
 
-DB_FILE = "users.db"
+con = sqlite3.connect("users.db")
+cur = con.cursor()
 
-def authenticate(username, password):
-    con = sqlite3.connect(DB_FILE)
-    c = con.cursor()
-    c.execute("SELECT password FROM users WHERE username=?", (username,))
-    row = c.fetchone()
-    con.close()
+# Create table
+cur.execute("CREATE TABLE IF NOT EXISTS users (username TEXT, password TEXT, role TEXT)")
 
-    if row:
-        stored_hash = row[0]
+# Add an admin user
+username = "admin"
+password = "admin123"
+hashed_pw = bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
 
-        # Stored hash is str → convert to bytes
-        if isinstance(stored_hash, str):
-            stored_hash = stored_hash.encode('utf-8')
+cur.execute("INSERT INTO users (username, password, role) VALUES (?, ?, ?)",
+            (username, hashed_pw, "Admin"))
 
-        return bcrypt.checkpw(password.encode('utf-8'), stored_hash)
+con.commit()
+con.close()
 
-    return False
-
-
-def get_user_role(username):
-    con = sqlite3.connect(DB_FILE)
-    c = con.cursor()
-    c.execute("SELECT role FROM users WHERE username=?",(username,))
-    row = c.fetchone()
-    con.close()
-    return row[0] if row else "Unknown"
+print("✅ users.db created with username=admin, password=admin123")
